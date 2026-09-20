@@ -6,6 +6,8 @@ class Settings:
 
     # url de conexion hacia redis
     redis_url: str
+    # maximo de conexiones por proceso hacia redis
+    redis_max_connections: int
     # stream principal donde se registran las transacciones procesadas
     redis_stream_transacciones: str
     # grupo encargado de consumir los eventos del stream y enviarlos a mqtt
@@ -24,6 +26,10 @@ def cargar_settings() -> Settings:
 
     # obtiene la url de conexion hacia redis
     redis_url = os.getenv("REDIS_URL")
+    # obtiene el maximo de conexiones por proceso hacia redis
+    redis_max_connections = int(
+        os.getenv("REDIS_MAX_CONNECTIONS", "800")
+    )
     # obtiene el nombre del stream principal de transacciones
     redis_stream_transacciones = os.getenv(
         "REDIS_STREAM_TRANSACCIONES",
@@ -69,6 +75,7 @@ def cargar_settings() -> Settings:
 
     return Settings(
         redis_url=redis_url,
+        redis_max_connections=redis_max_connections,
         redis_stream_transacciones=redis_stream_transacciones,
         redis_consumer_group_mqtt=redis_consumer_group_mqtt,
         database_url=database_url,

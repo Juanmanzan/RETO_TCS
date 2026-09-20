@@ -160,6 +160,7 @@ async def publicar_evento_mqtt(
         clave_idempotencia=evento.get(
             "clave_idempotencia"
         ),
+        nivel=logging.DEBUG,
     )
 
 
@@ -218,6 +219,7 @@ async def publicar_evento_mqtt(
         clave_idempotencia=evento.get(
             "clave_idempotencia"
         ),
+        nivel=logging.DEBUG,
     )
 
 
@@ -262,6 +264,7 @@ async def procesar_evento(
         clave_idempotencia=datos_evento.get(
             "clave_idempotencia"
         ),
+        nivel=logging.DEBUG,
     )
 
     try:
@@ -301,6 +304,7 @@ async def procesar_evento(
             clave_idempotencia=datos_evento.get(
                 "clave_idempotencia"
             ),
+            nivel=logging.DEBUG,
         )
 
     except Exception:

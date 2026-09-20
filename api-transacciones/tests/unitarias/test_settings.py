@@ -16,6 +16,10 @@ def test_cargar_settings(monkeypatch):
         "grupo:mqtt",
     )
     monkeypatch.setenv(
+        "REDIS_MAX_CONNECTIONS",
+        "800",
+    )
+    monkeypatch.setenv(
         "DATABASE_URL",
         "postgresql+asyncpg://app_user:password@postgres:5432/smartbancs",
     )
@@ -38,6 +42,7 @@ def test_cargar_settings(monkeypatch):
     settings = modulo.settings
 
     assert settings.redis_url == "redis://app_user:password@redis:6379/0"
+    assert settings.redis_max_connections == 800
     assert settings.redis_stream_transacciones == "stream:transacciones"
     assert settings.redis_consumer_group_mqtt == "grupo:mqtt"
     assert settings.database_url== "postgresql+asyncpg://app_user:password@postgres:5432/smartbancs"

@@ -7,4 +7,5 @@ def crear_cliente_redis() -> Redis:
         settings.redis_url,
         decode_responses=True,
         socket_timeout=None,
+        max_connections=settings.redis_max_connections,
     )

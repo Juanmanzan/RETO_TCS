@@ -189,6 +189,7 @@ async def persistir_lote_eventos(
                     evento.mensaje.mid
                 ),
                 clave_idempotencia=transaccion.clave_idempotencia,
+                nivel=logging.DEBUG,
             )
 
         else:

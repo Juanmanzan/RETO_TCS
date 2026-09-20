@@ -141,6 +141,7 @@ class ServicioTransacciones:
             motivo=resultado.motivo,
             clave_idempotencia=transferencia.clave_idempotencia,
             duracion_ms=duracion_lua_ms,
+            nivel=logging.DEBUG,
         )
 
         ## cuando la solicitud no es idempotente, Lua tambien
@@ -157,6 +158,7 @@ class ServicioTransacciones:
                 estado=resultado.estado,
                 motivo=resultado.motivo,
                 clave_idempotencia=transferencia.clave_idempotencia,
+                nivel=logging.DEBUG,
             )
 
         ## registra una sola vez el resultado final de la transaccion

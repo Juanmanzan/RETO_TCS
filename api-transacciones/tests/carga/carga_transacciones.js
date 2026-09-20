@@ -5,8 +5,12 @@ const BASE_URL = __ENV.BASE_URL || 'http://localhost:8002';
 
 const RATE = Number(__ENV.RATE || 100);
 const DURATION = __ENV.DURATION || '30s';
+const VALIDAR_NEGOCIO =
+  (__ENV.VALIDAR_NEGOCIO || 'true').toLowerCase() === 'true';
 
 export const options = {
+  discardResponseBodies: !VALIDAR_NEGOCIO,
+
   scenarios: {
     transacciones: {
       executor: 'constant-arrival-rate',
@@ -103,8 +107,21 @@ export default function () {
     parametros,
   );
 
+  let cuerpo = {};
+
+  if (VALIDAR_NEGOCIO) {
+    try {
+      cuerpo = respuesta.json();
+    } catch {
+      cuerpo = {};
+    }
+  }
 
   check(respuesta, {
     'respuesta HTTP 200': (r) => r.status === 200,
+    'transaccion completada': () =>
+      !VALIDAR_NEGOCIO || cuerpo.estado === 'COMPLETADA',
+    'motivo OK': () =>
+      !VALIDAR_NEGOCIO || cuerpo.motivo === 'OK',
   });
 }
