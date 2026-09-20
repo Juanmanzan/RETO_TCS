@@ -1,0 +1,38 @@
+global:
+  scrape_interval: 5s
+  scrape_timeout: 3s
+
+scrape_configs:
+
+  - job_name: "api-transacciones"
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "api-transacciones:8000"
+
+  - job_name: "api-ia"
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "api-ia:8000"
+
+  - job_name: "victoriametrics"
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "victoriametrics:8428"
+  
+  - job_name: "worker-publicador"
+    static_configs:
+      - targets:
+          - "worker-publicador:9101"
+  
+  - job_name: "worker-persistencia"
+    static_configs:
+      - targets:
+          - "worker-persistencia:9102"
+
+  - job_name: "worker-ia"
+    static_configs:
+      - targets:
+          - "worker-ia:9103"

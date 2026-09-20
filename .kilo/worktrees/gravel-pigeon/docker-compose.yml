@@ -1,0 +1,412 @@
+services:
+
+  ## configuracion del contenedor de la base de datos postgres
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres_transacciones
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - TCS_RED
+
+  ## servicio de mqtt
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: mqtt_broker
+    restart: unless-stopped
+    environment:
+      MQTT_USER: ${MQTT_USER}
+      MQTT_PASSWORD: ${MQTT_PASSWORD}
+    ports:
+      - "127.0.0.1:1883:1883"
+    volumes:
+      - ./mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mqtt/config/passwords:/mosquitto/config/passwords:ro
+      - mqtt_data:/mosquitto/data
+      - mqtt_logs:/mosquitto/log
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mosquitto_sub -h localhost -p 1883 -u \"$${MQTT_USER}\" -P \"$${MQTT_PASSWORD}\" -t '$$SYS/broker/version' -C 1 -W 3 >/dev/null 2>&1 || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - TCS_RED
+
+
+  # configuracion del contenedor de la base de datos en memoria redis 
+
+  redis:
+    image: redis:8-alpine
+    container_name: redis_streams
+    restart: unless-stopped
+    environment:
+      REDIS_USER: ${REDIS_USER}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB: ${REDIS_DB}
+    command:
+      - /bin/sh
+      - -c
+      - |
+        exec redis-server \
+          --appendonly yes \
+          --appendfsync everysec \
+          --user "$${REDIS_USER}" on ">$${REDIS_PASSWORD}" "~*" "+@all" \
+          --user default off
+    ports:
+      - "127.0.0.1:6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "REDISCLI_AUTH=\"$${REDIS_PASSWORD}\" redis-cli --user \"$${REDIS_USER}\" ping | grep PONG"
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - TCS_RED
+
+  redis-init:
+    image: redis:8-alpine
+    container_name: redis_init
+
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: ${REDIS_DB}
+      REDIS_USER: ${REDIS_USER}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+    volumes:
+      - ./redis/init/init_redis.sh:/init_redis.sh:ro
+
+    command:
+      - /bin/sh
+      - /init_redis.sh
+
+    depends_on:
+      redis:
+        condition: service_healthy
+
+    networks:
+      - TCS_RED
+
+    restart: "no"
+
+    
+  # configuracion del contenedor de la api de transacciones
+  api-transacciones:
+    build:
+      context: ./api-transacciones
+      dockerfile: Dockerfile
+    container_name: api_transacciones
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_STREAM_TRANSACCIONES: ${REDIS_STREAM_TRANSACCIONES}
+      REDIS_CONSUMER_GROUP_MQTT: ${REDIS_CONSUMER_GROUP_MQTT}
+      MQTT_URL: ${MQTT_URL}
+      MQTT_TOPIC_PERSISTENCIA: ${MQTT_TOPIC_PERSISTENCIA}
+      MQTT_TOPIC_IA: ${MQTT_TOPIC_IA}
+      PROMETHEUS_MULTIPROC_DIR: /tmp/prometheus-multiproc
+    ports:
+      - "8002:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - TCS_RED
+
+    # configuracion del contenedor de la api de IA
+  api-ia:
+    build:
+      context: ./api-ia
+      dockerfile: Dockerfile
+    container_name: api_ia
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      MQTT_URL: ${MQTT_URL}
+      MQTT_TOPIC_IA: ${MQTT_TOPIC_IA}
+      API_IA_URL: http://api-ia:8000
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - TCS_RED
+
+  ## worker que consume eventos de transacciones para generar recomendaciones de ia
+  worker-ia:
+    build:
+      context: ./api-ia
+      dockerfile: Dockerfile
+    container_name: worker_ia
+    restart: unless-stopped
+    command:
+      [
+        "python",
+        "-m",
+        "app.workers.consumidor_ia"
+      ]
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      MQTT_URL: ${MQTT_URL}
+      MQTT_TOPIC_IA: ${MQTT_TOPIC_IA}
+      API_IA_URL: http://api-ia:8000
+      IA_CONCURRENCIA: 20
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+      api-ia:
+        condition: service_healthy
+    expose:
+      - "9103"
+    networks:
+      - TCS_RED
+
+
+  # Almacenamiento de métricas
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:v1.152.0
+    container_name: victoriametrics
+    restart: unless-stopped
+    command:
+      - "-storageDataPath=/victoria-metrics-data"
+      - "-retentionPeriod=30d"
+    ports:
+      - "127.0.0.1:8429:8428"
+    volumes:
+      - victoriametrics_data:/victoria-metrics-data
+    networks:
+      - TCS_RED
+
+
+  # Recolector de métricas
+  vmagent:
+    image: victoriametrics/vmagent:v1.152.0
+    container_name: vmagent
+    restart: unless-stopped
+    command:
+      - "-promscrape.config=/etc/vmagent/scrape.yml"
+      - "-remoteWrite.url=http://victoriametrics:8428/api/v1/write"
+      - "-remoteWrite.tmpDataPath=/vmagent-data"
+    ports:
+      - "8430:8429"
+    volumes:
+      - ./observabilidad/vmagent/scrape.yml:/etc/vmagent/scrape.yml:ro
+      - vmagent_data:/vmagent-data
+    depends_on:
+      - victoriametrics
+      - api-transacciones
+      - api-ia
+      - worker-ia
+    networks:
+      - TCS_RED 
+    
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+
+    depends_on:
+      - victoriametrics
+      - loki
+
+    networks:
+      - TCS_RED
+    
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+
+    command:
+      - "-config.file=/etc/loki/local-config.yaml"
+
+    ports:
+      - "3100:3100"
+
+    volumes:
+      - loki_data:/loki
+
+    networks:
+      - TCS_RED
+
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    restart: unless-stopped
+    command:
+      - "run"
+      - "/etc/alloy/config.alloy"
+    volumes:
+      - ./observabilidad/alloy/config.alloy:/etc/alloy/config.alloy:ro
+
+      # permite a Alloy descubrir y leer logs
+      # de los contenedores Docker
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - loki
+    networks:
+      - TCS_RED
+
+
+  ## worker publicador de eventos (transacciones) de redis stream
+
+  worker-publicador:
+      build:
+        context: ./api-transacciones
+        dockerfile: Dockerfile
+      container_name: worker_publicador_eventos
+      restart: unless-stopped
+      command:
+        [
+          "python",
+          "-m",
+          "app.workers.publicador_eventos"
+        ]
+      environment:
+        DATABASE_URL: ${DATABASE_URL}
+        REDIS_URL: ${REDIS_URL}
+        REDIS_STREAM_TRANSACCIONES: ${REDIS_STREAM_TRANSACCIONES}
+        REDIS_CONSUMER_GROUP_MQTT: ${REDIS_CONSUMER_GROUP_MQTT}
+        MQTT_URL: ${MQTT_URL}
+        MQTT_TOPIC_PERSISTENCIA: ${MQTT_TOPIC_PERSISTENCIA}
+        MQTT_TOPIC_IA: ${MQTT_TOPIC_IA}
+      depends_on:
+        redis:
+          condition: service_healthy
+        mqtt:
+          condition: service_healthy
+      expose:
+        - "9101"
+      networks:
+        - TCS_RED
+
+ ## worker de persistencia inserta los ebentos de redis stream (transsacciones) en posgret SQl
+  worker-persistencia:
+    build:
+      context: ./api-transacciones
+      dockerfile: Dockerfile
+    container_name: worker_persistencia
+    restart: unless-stopped
+
+    command:
+      [
+        "python",
+        "-m",
+        "app.workers.persistencia"
+      ]
+
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_STREAM_TRANSACCIONES: ${REDIS_STREAM_TRANSACCIONES}
+      REDIS_CONSUMER_GROUP_MQTT: ${REDIS_CONSUMER_GROUP_MQTT}
+      MQTT_URL: ${MQTT_URL}
+      MQTT_TOPIC_PERSISTENCIA: ${MQTT_TOPIC_PERSISTENCIA}
+      MQTT_TOPIC_IA: ${MQTT_TOPIC_IA}
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mqtt:
+        condition: service_healthy
+    expose:
+        - "9102"
+    networks:
+      - TCS_RED
+
+# red
+networks:
+  TCS_RED:
+    driver: bridge
+
+## volumenes 
+volumes:
+  postgres_data:
+  redis_data:
+  victoriametrics_data:
+  vmagent_data:
+  mqtt_data:
+  mqtt_logs:
+  grafana_data:
+  loki_data:
+
+

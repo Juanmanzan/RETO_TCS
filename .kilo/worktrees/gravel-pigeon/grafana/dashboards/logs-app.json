@@ -1,0 +1,311 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "title": "Logs App",
+            "type": "row"
+        },
+        {
+            "datasource": "loki",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 0,
+                "y": 1
+            },
+            "id": 2,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto",
+                "wideLayout": false
+            },
+            "targets": [
+                {
+                    "datasource": "loki",
+                    "expr": "sum(count_over_time({service=~\"$filtro_nombre\"} |= \"$buscar\" [5m]))",
+                    "legendFormat": "logs",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Logs ultimos 5m",
+            "type": "stat"
+        },
+        {
+            "datasource": "loki",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 6,
+                "x": 6,
+                "y": 1
+            },
+            "id": 3,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto",
+                "wideLayout": false
+            },
+            "targets": [
+                {
+                    "datasource": "loki",
+                    "expr": "sum(count_over_time({service=~\"$filtro_nombre\"} |= \"$buscar\" |~ \"(?i)(error|exception|traceback|failed|fallo)\" [5m]))",
+                    "legendFormat": "errores",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Errores ultimos 5m",
+            "type": "stat"
+        },
+        {
+            "datasource": "loki",
+            "gridPos": {
+                "h": 10,
+                "w": 24,
+                "x": 0,
+                "y": 5
+            },
+            "id": 5,
+            "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showCommonLabels": false,
+                "showLabels": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "wrapLogMessage": true
+            },
+            "targets": [
+                {
+                    "datasource": "loki",
+                    "expr": "{service=~\"$filtro_nombre\"} |= \"$buscar\"",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Flujo de aplicacion",
+            "type": "logs"
+        },
+        {
+            "datasource": "loki",
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 15
+            },
+            "id": 6,
+            "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showCommonLabels": false,
+                "showLabels": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "wrapLogMessage": true
+            },
+            "targets": [
+                {
+                    "datasource": "loki",
+                    "expr": "{service=~\"$filtro_nombre\"} |= \"$buscar\" |~ \"(?i)(error|exception|traceback|failed|fallo)\"",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Errores",
+            "type": "logs"
+        },
+        {
+            "datasource": "loki",
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 23
+            },
+            "id": 7,
+            "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": true,
+                "showCommonLabels": false,
+                "showLabels": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "wrapLogMessage": true
+            },
+            "targets": [
+                {
+                    "datasource": "loki",
+                    "expr": "{service=~\"$filtro_nombre\"} |= \"$buscar\" |~ \"(?i)(Worker|Lote PostgreSQL|Redis Stream|MQTT|PostgreSQL|DLQ|transferencia|transaccion|persistencia|publicador|recuperacion|conectado|iniciado|interrumpida|confirmado|procesado|recomendacion|IA|ia|error|warning)\"",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Eventos importantes",
+            "type": "logs"
+        }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 42,
+    "tags": [
+        "smartbancs",
+        "logs",
+        "loki",
+        "provisionado"
+    ],
+    "templating": {
+        "list": [
+            {
+                "allValue": ".*",
+                "current": {
+                    "selected": true,
+                    "text": [
+                        "api-transacciones",
+                        "worker-publicador",
+                        "worker-persistencia",
+                        "api-ia",
+                        "worker-ia"
+                    ],
+                    "value": [
+                        "api-transacciones",
+                        "worker-publicador",
+                        "worker-persistencia",
+                        "api-ia",
+                        "worker-ia"
+                    ]
+                },
+                "datasource": "loki",
+                "includeAll": true,
+                "label": "Filtro nombre",
+                "multi": true,
+                "name": "filtro_nombre",
+                "query": "label_values(service)",
+                "refresh": 1,
+                "regex": "/(api-transacciones|worker-publicador|worker-persistencia|api-ia|worker-ia)/",
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "",
+                    "value": ""
+                },
+                "label": "Buscar valor",
+                "name": "buscar",
+                "query": "",
+                "type": "textbox"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-3h",
+        "to": "now"
+    },
+    "timepicker": {
+        "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h"
+        ]
+    },
+    "timezone": "browser",
+    "title": "Logs App",
+    "uid": "smartbancs-logs-app",
+    "version": 1
+}

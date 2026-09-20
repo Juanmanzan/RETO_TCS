@@ -1,0 +1,92 @@
+
+-- tabla de clientes 
+INSERT INTO clientes (
+    id,
+    nombre,
+    apellido,
+    email,
+    ingresos_mensuales,
+    gastos_mensuales
+)
+VALUES
+    (
+        1,
+        'Carlos',
+        'Mendoza',
+        'carlos.mendoza@example.com',
+        1800.00,
+        950.00
+    ),
+    (
+        2,
+        'Andrea',
+        'Vargas',
+        'andrea.vargas@example.com',
+        2500.00,
+        1800.00
+    ),
+    (
+        3,
+        'Luis',
+        'Cabrera',
+        'luis.cabrera@example.com',
+        1200.00,
+        1050.00
+    ),
+    (
+        4,
+        'Daniela',
+        'Torres',
+        'daniela.torres@example.com',
+        3200.00,
+        1400.00
+    ),
+    (
+        5,
+        'Mateo',
+        'Salazar',
+        'mateo.salazar@example.com',
+        900.00,
+        780.00
+    );
+
+
+
+-- cuentas de los usuarios 
+INSERT INTO cuentas (
+    id,
+    cliente_id,
+    tipo_cuenta,
+    saldo_centavos
+)
+VALUES
+    (
+        1001,
+        1,
+        'AHORROS',
+        500000
+    ),
+    (
+        1002,
+        2,
+        'CORRIENTE',
+        1250000
+    ),
+    (
+        1003,
+        3,
+        'AHORROS',
+        85000
+    ),
+    (
+        1004,
+        4,
+        'CORRIENTE',
+        2200000
+    ),
+    (
+        1005,
+        5,
+        'AHORROS',
+        32000
+    );

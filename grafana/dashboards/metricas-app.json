@@ -1,0 +1,2072 @@
+{
+    "annotations":  {
+                        "list":  [
+                                     {
+                                         "builtIn":  1,
+                                         "datasource":  {
+                                                            "type":  "grafana",
+                                                            "uid":  "-- Grafana --"
+                                                        },
+                                         "enable":  true,
+                                         "hide":  true,
+                                         "iconColor":  "rgba(0, 211, 255, 1)",
+                                         "name":  "Annotations \u0026 Alerts",
+                                         "type":  "dashboard"
+                                     }
+                                 ]
+                    },
+    "editable":  true,
+    "fiscalYearStartMonth":  0,
+    "graphTooltip":  0,
+    "id":  null,
+    "links":  [
+
+              ],
+    "liveNow":  false,
+    "panels":  [
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  0
+                                   },
+                       "id":  1,
+                       "title":  "API Transacciones",
+                       "type":  "row"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  0,
+                                       "y":  1
+                                   },
+                       "id":  2,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_transacciones_total{job=\"api-transacciones\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "legendFormat":  "total",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Transacciones ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  4,
+                                       "y":  1
+                                   },
+                       "id":  3,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_transacciones_total{job=\"api-transacciones\",estado=\"COMPLETADA\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "legendFormat":  "completadas",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Completadas ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  8,
+                                       "y":  1
+                                   },
+                       "id":  4,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_transacciones_total{job=\"api-transacciones\",estado=\"RECHAZADA\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "legendFormat":  "rechazadas",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Rechazadas ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  2,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  12,
+                                       "y":  1
+                                   },
+                       "id":  5,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(rate(smartbancs_transacciones_total{job=\"api-transacciones\"}[$__rate_interval])) or vector(0)",
+                                           "instant":  true,
+                                           "legendFormat":  "tps",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "TPS actual",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  16,
+                                       "y":  1
+                                   },
+                       "id":  6,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_errores_transacciones_total{job=\"api-transacciones\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "legendFormat":  "errores",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Errores API ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  20,
+                                       "y":  1
+                                   },
+                       "id":  7,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_timeouts_total{job=\"api-transacciones\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "legendFormat":  "timeouts",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Timeouts ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  18,
+                                                                           "lineInterpolation":  "linear",
+                                                                           "lineWidth":  2,
+                                                                           "showPoints":  "never",
+                                                                           "spanNulls":  false
+                                                                       },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  5
+                                   },
+                       "id":  8,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi",
+                                                       "sort":  "desc"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (estado) (rate(smartbancs_transacciones_total{job=\"api-transacciones\"}[$__rate_interval]))",
+                                           "legendFormat":  "{{estado}}",
+                                           "range":  true,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "TPS por estado",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  0.2
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  0.5
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "ms"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  5
+                                   },
+                       "id":  9,
+                       "options":  {
+                                       "displayMode":  "gradient",
+                                       "legend":  {
+                                                      "showLegend":  false
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showUnfilled":  true,
+                                       "valueMode":  "color"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.50, sum by (le) (rate(smartbancs_http_transaccion_duracion_seconds_bucket{job=\"api-transacciones\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P50",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.95, sum by (le) (rate(smartbancs_http_transaccion_duracion_seconds_bucket{job=\"api-transacciones\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P95",
+                                           "range":  false,
+                                           "refId":  "B"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.99, sum by (le) (rate(smartbancs_http_transaccion_duracion_seconds_bucket{job=\"api-transacciones\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P99",
+                                           "range":  false,
+                                           "refId":  "C"
+                                       }
+                                   ],
+                       "title":  "Latencia HTTP",
+                       "type":  "bargauge"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  8,
+                                       "x":  0,
+                                       "y":  12
+                                   },
+                       "id":  10,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "pieType":  "pie",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "tooltip":  {
+                                                       "hideZeros":  false,
+                                                       "mode":  "single",
+                                                       "sort":  "none"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (estado) (increase(smartbancs_transacciones_total{job=\"api-transacciones\"}[5m]))",
+                                           "instant":  true,
+                                           "legendFormat":  "{{estado}}",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Distribucion por estado ultimos 5m",
+                       "type":  "piechart"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "axisPlacement":  "auto",
+                                                                           "fillOpacity":  60,
+                                                                           "hideFrom":  {
+                                                                                            "legend":  false,
+                                                                                            "tooltip":  false,
+                                                                                            "viz":  false
+                                                                                        },
+                                                                           "lineWidth":  1
+                                                                       },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  8,
+                                       "x":  8,
+                                       "y":  12
+                                   },
+                       "id":  11,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "list",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "orientation":  "auto",
+                                       "tooltip":  {
+                                                       "mode":  "single",
+                                                       "sort":  "desc"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (motivo) (increase(smartbancs_transacciones_total{job=\"api-transacciones\",estado=\"RECHAZADA\"}[5m]))",
+                                           "instant":  true,
+                                           "legendFormat":  "{{motivo}}",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Rechazos por motivo ultimos 5m",
+                       "type":  "barchart"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  4,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  0.01
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  0.05
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "ms"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  8,
+                                       "x":  16,
+                                       "y":  12
+                                   },
+                       "id":  12,
+                       "options":  {
+                                       "displayMode":  "gradient",
+                                       "legend":  {
+                                                      "showLegend":  false
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showUnfilled":  true,
+                                       "valueMode":  "color"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.50, sum by (le) (rate(smartbancs_redis_lua_duracion_seconds_bucket{job=\"api-transacciones\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P50",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.95, sum by (le) (rate(smartbancs_redis_lua_duracion_seconds_bucket{job=\"api-transacciones\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P95",
+                                           "range":  false,
+                                           "refId":  "B"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.99, sum by (le) (rate(smartbancs_redis_lua_duracion_seconds_bucket{job=\"api-transacciones\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P99",
+                                           "range":  false,
+                                           "refId":  "C"
+                                       }
+                                   ],
+                       "title":  "Latencia Redis Lua",
+                       "type":  "bargauge"
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  19
+                                   },
+                       "id":  20,
+                       "title":  "Worker Publicador",
+                       "type":  "row"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  6,
+                                       "x":  0,
+                                       "y":  20
+                                   },
+                       "id":  21,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_eventos_stream_recibidos_total{job=\"worker-publicador\"}[24h])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Eventos Redis historicos",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  6,
+                                       "x":  6,
+                                       "y":  20
+                                   },
+                       "id":  22,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_eventos_mqtt_publicados_total{job=\"worker-publicador\"}[24h])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Publicaciones MQTT historicas",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  6,
+                                       "x":  12,
+                                       "y":  20
+                                   },
+                       "id":  23,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_errores_mqtt_total{job=\"worker-publicador\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Errores MQTT ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  6,
+                                       "x":  18,
+                                       "y":  20
+                                   },
+                       "id":  24,
+                       "options":  {
+                                       "displayMode":  "gradient",
+                                       "legend":  {
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showUnfilled":  true,
+                                       "valueMode":  "color"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (destino) (increase(smartbancs_eventos_mqtt_publicados_total{job=\"worker-publicador\"}[24h]))",
+                                           "instant":  true,
+                                           "legendFormat":  "{{destino}}",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Publicaciones por destino historicas",
+                       "type":  "bargauge"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  18,
+                                                                           "lineWidth":  2,
+                                                                           "showPoints":  "never"
+                                                                       },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  24
+                                   },
+                       "id":  25,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi",
+                                                       "sort":  "desc"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (destino) (rate(smartbancs_eventos_mqtt_publicados_total{job=\"worker-publicador\"}[$__rate_interval]))",
+                                           "legendFormat":  "{{destino}}",
+                                           "range":  true,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Publicaciones MQTT por segundo",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  4,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  0.01
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  0.05
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "ms"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  24
+                                   },
+                       "id":  26,
+                       "options":  {
+                                       "displayMode":  "gradient",
+                                       "legend":  {
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showUnfilled":  true,
+                                       "valueMode":  "color"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.95, sum by (le, destino) (rate(smartbancs_publicacion_mqtt_duracion_seconds_bucket{job=\"worker-publicador\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "{{destino}} P95",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.99, sum by (le, destino) (rate(smartbancs_publicacion_mqtt_duracion_seconds_bucket{job=\"worker-publicador\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "{{destino}} P99",
+                                           "range":  false,
+                                           "refId":  "B"
+                                       }
+                                   ],
+                       "title":  "Latencia MQTT",
+                       "type":  "bargauge"
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  31
+                                   },
+                       "id":  30,
+                       "title":  "Worker Persistencia",
+                       "type":  "row"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  0,
+                                       "y":  32
+                                   },
+                       "id":  31,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_eventos_persistencia_recibidos_total{job=\"worker-persistencia\"}[24h])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Eventos recibidos historicos",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  4,
+                                       "y":  32
+                                   },
+                       "id":  32,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_eventos_persistidos_total{job=\"worker-persistencia\"}[24h])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Persistencias historicas",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  8,
+                                       "y":  32
+                                   },
+                       "id":  33,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_eventos_duplicados_total{job=\"worker-persistencia\"}[24h])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Duplicados historicos",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  12,
+                                       "y":  32
+                                   },
+                       "id":  34,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_eventos_dlq_total{job=\"worker-persistencia\"}[24h])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "DLQ historico",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  16,
+                                       "y":  32
+                                   },
+                       "id":  35,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_errores_persistencia_total{job=\"worker-persistencia\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Errores persistencia ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  2,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  20,
+                                       "y":  32
+                                   },
+                       "id":  36,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(rate(smartbancs_eventos_persistidos_total{job=\"worker-persistencia\"}[$__rate_interval])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "TPS persistencia",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  18,
+                                                                           "lineWidth":  2,
+                                                                           "showPoints":  "never"
+                                                                       },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  36
+                                   },
+                       "id":  37,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi",
+                                                       "sort":  "desc"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(rate(smartbancs_eventos_persistidos_total{job=\"worker-persistencia\"}[$__rate_interval]))",
+                                           "legendFormat":  "persistidos TPS",
+                                           "range":  true,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(rate(smartbancs_eventos_persistencia_recibidos_total{job=\"worker-persistencia\"}[$__rate_interval]))",
+                                           "legendFormat":  "recibidos TPS",
+                                           "range":  true,
+                                           "refId":  "B"
+                                       }
+                                   ],
+                       "title":  "TPS persistencia",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  0.05
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  0.2
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "ms"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  36
+                                   },
+                       "id":  38,
+                       "options":  {
+                                       "displayMode":  "gradient",
+                                       "legend":  {
+                                                      "showLegend":  false
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showUnfilled":  true,
+                                       "valueMode":  "color"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.50, sum by (le) (rate(smartbancs_persistencia_duracion_seconds_bucket{job=\"worker-persistencia\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P50",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.95, sum by (le) (rate(smartbancs_persistencia_duracion_seconds_bucket{job=\"worker-persistencia\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P95",
+                                           "range":  false,
+                                           "refId":  "B"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.99, sum by (le) (rate(smartbancs_persistencia_duracion_seconds_bucket{job=\"worker-persistencia\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P99",
+                                           "range":  false,
+                                           "refId":  "C"
+                                       }
+                                   ],
+                       "title":  "Latencia persistencia por lote",
+                       "type":  "bargauge"
+                   },
+                   {
+                       "collapsed":  false,
+                       "gridPos":  {
+                                       "h":  1,
+                                       "w":  24,
+                                       "x":  0,
+                                       "y":  43
+                                   },
+                       "id":  39,
+                       "title":  "api ia",
+                       "type":  "row"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  0,
+                                       "y":  44
+                                   },
+                       "id":  40,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_ia_recomendaciones_solicitadas_total{job=~\"api-ia|worker-ia\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Llamadas IA ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  4,
+                                       "y":  44
+                                   },
+                       "id":  41,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_ia_recomendaciones_procesadas_total{job=~\"api-ia|worker-ia\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Procesadas IA ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  8,
+                                       "y":  44
+                                   },
+                       "id":  42,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_ia_recomendaciones_persistidas_total{job=\"worker-ia\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Persistidas IA ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  12,
+                                       "y":  44
+                                   },
+                       "id":  43,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_ia_eventos_recibidos_total{job=\"worker-ia\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Eventos IA recibidos ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  1
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  16,
+                                       "y":  44
+                                   },
+                       "id":  44,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(increase(smartbancs_ia_errores_total{job=~\"api-ia|worker-ia\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "Errores IA ultimos 5m",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  4,
+                                       "w":  4,
+                                       "x":  20,
+                                       "y":  44
+                                   },
+                       "id":  45,
+                       "options":  {
+                                       "colorMode":  "value",
+                                       "graphMode":  "area",
+                                       "justifyMode":  "auto",
+                                       "orientation":  "auto",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "textMode":  "auto"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum(rate(smartbancs_ia_recomendaciones_solicitadas_total{job=~\"api-ia|worker-ia\"}[$__rate_interval])) or vector(0)",
+                                           "instant":  true,
+                                           "range":  false,
+                                           "refId":  "A"
+                                       }
+                                   ],
+                       "title":  "TPS IA actual",
+                       "type":  "stat"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "custom":  {
+                                                                           "drawStyle":  "line",
+                                                                           "fillOpacity":  18,
+                                                                           "lineWidth":  2,
+                                                                           "showPoints":  "never"
+                                                                       },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  0,
+                                       "y":  48
+                                   },
+                       "id":  46,
+                       "options":  {
+                                       "legend":  {
+                                                      "displayMode":  "table",
+                                                      "placement":  "bottom",
+                                                      "showLegend":  true
+                                                  },
+                                       "tooltip":  {
+                                                       "mode":  "multi",
+                                                       "sort":  "desc"
+                                                   }
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (origen) (rate(smartbancs_ia_recomendaciones_solicitadas_total{job=~\"api-ia|worker-ia\"}[$__rate_interval]))",
+                                           "legendFormat":  "solicitudes {{origen}}",
+                                           "range":  true,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "sum by (origen) (rate(smartbancs_ia_recomendaciones_procesadas_total{job=~\"api-ia|worker-ia\"}[$__rate_interval]))",
+                                           "legendFormat":  "procesadas {{origen}}",
+                                           "range":  true,
+                                           "refId":  "B"
+                                       }
+                                   ],
+                       "title":  "TPS IA",
+                       "type":  "timeseries"
+                   },
+                   {
+                       "datasource":  "prometheus",
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "thresholds"
+                                                                      },
+                                                            "decimals":  3,
+                                                            "thresholds":  {
+                                                                               "mode":  "absolute",
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "color":  "green",
+                                                                                                 "value":  null
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "orange",
+                                                                                                 "value":  50
+                                                                                             },
+                                                                                             {
+                                                                                                 "color":  "red",
+                                                                                                 "value":  200
+                                                                                             }
+                                                                                         ]
+                                                                           },
+                                                            "unit":  "ms"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "gridPos":  {
+                                       "h":  7,
+                                       "w":  12,
+                                       "x":  12,
+                                       "y":  48
+                                   },
+                       "id":  47,
+                       "options":  {
+                                       "displayMode":  "gradient",
+                                       "legend":  {
+                                                      "showLegend":  false
+                                                  },
+                                       "orientation":  "horizontal",
+                                       "reduceOptions":  {
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  "",
+                                                             "values":  false
+                                                         },
+                                       "showUnfilled":  true,
+                                       "valueMode":  "color"
+                                   },
+                       "targets":  [
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.50, sum by (le) (rate(smartbancs_ia_recomendacion_duracion_seconds_bucket{job=~\"api-ia|worker-ia\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P50",
+                                           "range":  false,
+                                           "refId":  "A"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.95, sum by (le) (rate(smartbancs_ia_recomendacion_duracion_seconds_bucket{job=~\"api-ia|worker-ia\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P95",
+                                           "range":  false,
+                                           "refId":  "B"
+                                       },
+                                       {
+                                           "datasource":  "prometheus",
+                                           "expr":  "1000 * (histogram_quantile(0.99, sum by (le) (rate(smartbancs_ia_recomendacion_duracion_seconds_bucket{job=~\"api-ia|worker-ia\"}[$__rate_interval]))))",
+                                           "instant":  true,
+                                           "legendFormat":  "P99",
+                                           "range":  false,
+                                           "refId":  "C"
+                                       }
+                                   ],
+                       "title":  "Latencia IA",
+                       "type":  "bargauge"
+                   }
+               ],
+    "refresh":  "5s",
+    "schemaVersion":  42,
+    "tags":  [
+                 "smartbancs",
+                 "metricas",
+                 "provisionado"
+             ],
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   },
+    "time":  {
+                 "from":  "now-6h",
+                 "to":  "now"
+             },
+    "timepicker":  {
+                       "refresh_intervals":  [
+                                                 "5s",
+                                                 "10s",
+                                                 "30s",
+                                                 "1m",
+                                                 "5m",
+                                                 "15m",
+                                                 "30m",
+                                                 "1h"
+                                             ]
+                   },
+    "timezone":  "browser",
+    "title":  "Metricas App",
+    "uid":  "smartbancs-metricas-app",
+    "version":  1
+}
