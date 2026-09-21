@@ -2,7 +2,7 @@
 
 El presente documento detalla el diseÃ±o arquitectÃ³nico y la implementaciÃ³n de un Producto MÃ­nimo Viable (MVP) para un sistema de transferencias en tiempo real con generaciÃ³n de recomendaciones financieras asÃ­ncronas.
 
-# Stack tecnolÃ³gico empleado
+# Stack tecnológico empleado
 
 **FastAPI:** Se emplea como framework principal de la soluciÃ³n, gracias a su gran rapidez en el procesamiento de peticiones, al estar construido sobre Starlette y Pydantic, adicional permite escalar tanto vertical como horizontalmente mediante mÃºltiples workers.
 
