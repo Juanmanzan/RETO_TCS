@@ -276,16 +276,37 @@ Dashboards provisionados:
 
 ## Pruebas
 
+Para ejecutar las pruebas sin Docker, crear un entorno virtual en la raiz del proyecto e instalar las dependencias generales:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
 Pruebas unitarias e integracion de transacciones:
 
 ```powershell
-docker compose run --rm api-transacciones pytest
+$env:PYTHONPATH="api-transacciones"
+python -m pytest api-transacciones/tests
 ```
 
 Pruebas unitarias e integracion de IA:
 
 ```powershell
-docker compose run --rm api-ia pytest
+$env:PYTHONPATH="api-ia"
+python -m pytest api-ia/tests
+```
+
+Si se quieren ejecutar solamente las pruebas unitarias:
+
+```powershell
+$env:PYTHONPATH="api-transacciones"
+python -m pytest api-transacciones/tests/unitarias
+
+$env:PYTHONPATH="api-ia"
+python -m pytest api-ia/tests/unitarias
 ```
 
 ### Pruebas de carga con k6
