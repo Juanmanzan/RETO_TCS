@@ -95,10 +95,10 @@ Documentacion por tema:
 - [Arquitectura general](documentos/arquitectura-general.md)
 - [API de transacciones](documentos/api-transacciones.md)
 - [API de IA](documentos/api-ia.md)
-- [Integracion Bancs y ETL](documentos/bancs-etl.md)
+- [ETL](documentos/ETL.md)
 - [Observabilidad y operacion](documentos/observabilidad-operacion.md)
-- [Pruebas de carga y DLQ](documentos/pruebas-carga-dlq.md)
-- [Respuestas teoricas pendientes](documentos/respuestas-teoricas.md)
+- [Reto técnico teoría](documentos/respuestas-teoricas.md)
+- [Declaración del uso de inteligencia artificial](documentos/declaratoria-del-uso-de-inteligencia-artificial.md)
 
 ## Prerrequisitos
 
