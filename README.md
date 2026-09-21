@@ -1,26 +1,26 @@
-# SmartBancs App
+﻿# SmartBancs App
 
-El presente documento detalla el diseño arquitectónico y la implementación de un Producto Mínimo Viable (MVP) para un sistema de transferencias en tiempo real con generación de recomendaciones financieras asíncronas.
+El presente documento detalla el diseÃ±o arquitectÃ³nico y la implementaciÃ³n de un Producto MÃ­nimo Viable (MVP) para un sistema de transferencias en tiempo real con generaciÃ³n de recomendaciones financieras asÃ­ncronas.
 
-# Stack tecnológico empleado
+# Stack tecnolÃ³gico empleado
 
-**FastAPI:** Se emplea como framework principal de la solución, gracias a su gran rapidez en el procesamiento de peticiones, al estar construido sobre Starlette y Pydantic, adicional permite escalar tanto vertical como horizontalmente mediante múltiples workers.
+**FastAPI:** Se emplea como framework principal de la soluciÃ³n, gracias a su gran rapidez en el procesamiento de peticiones, al estar construido sobre Starlette y Pydantic, adicional permite escalar tanto vertical como horizontalmente mediante mÃºltiples workers.
 
-**Redis:** Se emplea como base de datos transaccional en tiempo real, permite procesar la transacción en milisegundos. Esto aporta el rendimiento necesario para operaciones financieras que requieren baja latencia. Adicionalmente, mediante Redis Streams permite desacoplar la escritura de la transacción, a través de colas.
+**Redis:** Se emplea como base de datos transaccional en tiempo real, permite procesar la transacciÃ³n en milisegundos. Esto aporta el rendimiento necesario para operaciones financieras que requieren baja latencia. Adicionalmente, mediante Redis Streams permite desacoplar la escritura de la transacciÃ³n, a travÃ©s de colas.
 
-**PostgreSQL:** Se usa en la persistencia, encargada de almacenar de forma definitiva y consistente las transacciones generadas dentro del sistema. Se elige por su cumplimiento de propiedades ACID, además de contar con mecanismos maduros de control de acceso, auditoría y replicación.
+**PostgreSQL:** Se usa en la persistencia, encargada de almacenar de forma definitiva y consistente las transacciones generadas dentro del sistema. Se elige por su cumplimiento de propiedades ACID, ademÃ¡s de contar con mecanismos maduros de control de acceso, auditorÃ­a y replicaciÃ³n.
 
-**MQTT:** Se emplea como protocolo de mensajería ligero para la comunicación entre componentes que requieren eventos en tiempo real, dado su bajo overhead otorga un gran rendimiento en escenarios de alta frecuencia y su soporte de niveles de calidad de servicio (QoS) aportan confiabilidad en la entrega de la transacción.
+**MQTT:** Se emplea como protocolo de mensajerÃ­a ligero para la comunicaciÃ³n entre componentes que requieren eventos en tiempo real, dado su bajo overhead otorga un gran rendimiento en escenarios de alta frecuencia y su soporte de niveles de calidad de servicio (QoS) aportan confiabilidad en la entrega de la transacciÃ³n.
 
-**Workers asíncronos:** Se emplean procesos worker desacoplados del flujo principal de la API para el procesamiento de tareas que no requieren respuesta inmediata al usuario como: persistencia o generación de recomendaciones. Este enfoque permite que las transferencias se confirmen rápidamente sin bloquear al cliente por tareas secundarias.
+**Workers asÃ­ncronos:** Se emplean procesos worker desacoplados del flujo principal de la API para el procesamiento de tareas que no requieren respuesta inmediata al usuario como: persistencia o generaciÃ³n de recomendaciones. Este enfoque permite que las transferencias se confirmen rÃ¡pidamente sin bloquear al cliente por tareas secundarias.
 
-**VictoriaMetrics:** Se emplea como motor de métricas para observabilidad del sistema, destacando por su bajo consumo de recursos y alto rendimiento en la ingesta y consulta de metricas.
+**VictoriaMetrics:** Se emplea como motor de mÃ©tricas para observabilidad del sistema, destacando por su bajo consumo de recursos y alto rendimiento en la ingesta y consulta de metricas.
 
-**Grafana:** Se emplea como herramienta de visualización de métricas y dashboards, permitiendo monitorear el rendimiento del sistema: latencias, throughput, errores, lo cual facilita la detección temprana de cuellos de botella.
+**Grafana:** Se emplea como herramienta de visualizaciÃ³n de mÃ©tricas y dashboards, permitiendo monitorear el rendimiento del sistema: latencias, throughput, errores, lo cual facilita la detecciÃ³n temprana de cuellos de botella.
 
-**Loki:** Se emplea como sistema de gestión centralizada de logs, permitiendo correlacionar eventos entre los distintos componentes del sistema: API, workers, base de datos de forma eficiente.
+**Loki:** Se emplea como sistema de gestiÃ³n centralizada de logs, permitiendo correlacionar eventos entre los distintos componentes del sistema: API, workers, base de datos de forma eficiente.
 
-**k6:** Se emplea como herramienta de pruebas de carga, permitiendo simular múltiples usuarios concurrentes y validar el rendimiento del sistema bajo distintos escenarios de estrés.
+**k6:** Se emplea como herramienta de pruebas de carga, permitiendo simular mÃºltiples usuarios concurrentes y validar el rendimiento del sistema bajo distintos escenarios de estrÃ©s.
 
 
 ## Arquitectura resumida
@@ -34,7 +34,7 @@ graph TD
         REDIS[("2. Redis Lua Scripts")]
     end
 
-    subgraph Mensajeria["Capa de Mensajería"]
+    subgraph Mensajeria["Capa de MensajerÃ­a"]
         STREAM[("3. Redis Stream")]
         PUB["4. worker-publicador"]
         MQTT{{"Broker MQTT"}}
@@ -64,7 +64,7 @@ graph TD
 
     MQTT --> PERSIST
     PERSIST -->|"Lotes"| DB
-    PERSIST -.->|"Registros inválidos"| DLQ
+    PERSIST -.->|"Registros invÃ¡lidos"| DLQ
 
     MQTT --> WIA
     WIA --> APIIA
@@ -95,10 +95,10 @@ Documentacion por tema:
 - [Arquitectura general](documentos/arquitectura-general.md)
 - [API de transacciones](documentos/api-transacciones.md)
 - [API de IA](documentos/api-ia.md)
-- [ETL](documentos/ETL.md)
+- [Integracion Bancs y ETL](documentos/bancs-etl.md)
 - [Observabilidad y operacion](documentos/observabilidad-operacion.md)
-- [Reto técnico teoría](documentos/respuestas-teoricas.md)
-- [Declaración del uso de inteligencia artificial](documentos/declaratoria-del-uso-de-inteligencia-artificial.md)
+- [Pruebas de carga y DLQ](documentos/pruebas-carga-dlq.md)
+- [Respuestas teoricas pendientes](documentos/respuestas-teoricas.md)
 
 ## Prerrequisitos
 
@@ -276,7 +276,7 @@ Dashboards provisionados:
 
 ## Pruebas
 
-Para ejecutar las pruebas, debemos crear un entorno virtual en la raíz del proyecto e instalar las dependencias generales:
+Para ejecutar las pruebas, crear un entorno virtual en la raiz del proyecto e instalar las dependencias generales:
 
 ```powershell
 python -m venv .venv

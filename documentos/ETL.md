@@ -12,7 +12,7 @@ El directorio `ETL/` contiene:
 - `ETL.py`
 - `requirements.txt`
 
-Instalar dependencias del ETL localmente:
+Instalar dependencias del ETL localmente si no fueron instaladas las dependencias globales:
 
 ```powershell
 cd ETL
