@@ -276,7 +276,7 @@ Dashboards provisionados:
 
 ## Pruebas
 
-Para ejecutar las pruebas sin Docker, crear un entorno virtual en la raiz del proyecto e instalar las dependencias generales:
+Para ejecutar las pruebas, debemos crear un entorno virtual en la raíz del proyecto e instalar las dependencias generales:
 
 ```powershell
 python -m venv .venv
