@@ -30,16 +30,10 @@ export const options = {
     },
   },
 
-  thresholds: {
-    // menos del 1% de errores HTTP
-    http_req_failed: ['rate<0.01'],
-
-    // objetivos iniciales de latencia
-    http_req_duration: [
-      'p(95)<200',
-      'p(99)<500',
-    ],
-  },
+    thresholds: {
+      http_req_duration: ['p(95)<200', 'p(99)<500'],
+      http_req_failed: ['rate<0.01'],
+    },
 };
 
 
