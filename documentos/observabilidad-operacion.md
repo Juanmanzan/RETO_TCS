@@ -6,12 +6,34 @@ Definir que informacion permite identificar problemas de rendimiento, degradacio
 
 ## Stack implementado
 
-- Prometheus client en APIs y workers.
-- vmagent para recolectar metricas.
-- VictoriaMetrics como almacenamiento de metricas.
-- Grafana para dashboards.
-- Loki para logs.
-- Alloy para recolectar logs de contenedores.
+```mermaid
+graph LR
+    APPS["APIs y workers<br/>(exponen /metrics)"]
+    VMAGENT["vmagent"]
+    VM[("VictoriaMetrics")]
+    GRAF["Grafana"]
+
+    APPS -->|"Scrapea metricas"| VMAGENT
+    VMAGENT -->|"Remote write"| VM
+    VM -->|"Consulta"| GRAF
+
+    classDef api fill:#4A90D9,stroke:#2C5F8A,color:#fff,stroke-width:2px
+    classDef obs fill:#9B59B6,stroke:#6C3483,color:#fff,stroke-width:2px
+    classDef db fill:#6C757D,stroke:#495057,color:#fff,stroke-width:2px
+
+    class APPS api
+    class VMAGENT,GRAF obs
+    class VM db
+```
+
+| Componente | Rol |
+|---|---|
+| Prometheus client | Libreria embebida en las APIs y workers para exponer metricas en formato `/metrics`. |
+| vmagent | Recolecta (scrapea) las metricas expuestas por cada componente. |
+| VictoriaMetrics | Almacena las series de tiempo recolectadas por vmagent. |
+| Grafana | Consume VictoriaMetrics para construir los dashboards de la solucion. |
+| Loki | Almacena y centraliza los logs de la aplicacion. |
+| Alloy | Recolecta los logs de los contenedores y los envia a Loki. |
 
 ## URLs
 
@@ -38,7 +60,7 @@ Definir que informacion permite identificar problemas de rendimiento, degradacio
 
 ### Logs
 
-Los logs incluyen campos para trazabilidad:
+Los logs incluyen campos estructurados para trazabilidad. Se genera un registro en cada punto clave del flujo: cuando la transaccion se procesa mediante el script Lua, cuando el evento se publica en Redis Stream, y cuando es consumido por los workers de persistencia, el publicador de eventos y la IA. Esto garantiza una trazabilidad completa de cada transferencia a lo largo de todo el pipeline.
 
 - `trace_id`
 - `transaccion_id`
@@ -76,65 +98,59 @@ docker logs -f worker_ia
 docker compose ps
 ```
 
-Entrar a PostgreSQL:
+## Catalogo de metricas Prometheus por componente
 
-```powershell
-docker exec -it postgres_transacciones psql -U $env:POSTGRES_USER -d $env:POSTGRES_DB
-```
+Cada componente expone sus propias metricas para poder aislar en que punto exacto del flujo (API, Redis/Lua, MQTT, persistencia o IA) se origina una degradacion, un timeout o un error, en lugar de depender unicamente de los logs.
 
-Consulta sugerida para bloqueos en PostgreSQL:
+### API de transacciones
 
-```sql
-SELECT
-  blocked.pid AS blocked_pid,
-  blocked.query AS blocked_query,
-  blocking.pid AS blocking_pid,
-  blocking.query AS blocking_query
-FROM pg_catalog.pg_locks blocked_locks
-JOIN pg_catalog.pg_stat_activity blocked
-  ON blocked.pid = blocked_locks.pid
-JOIN pg_catalog.pg_locks blocking_locks
-  ON blocking_locks.locktype = blocked_locks.locktype
- AND blocking_locks.database IS NOT DISTINCT FROM blocked_locks.database
- AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
- AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
- AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
- AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
- AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
- AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
- AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
- AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
- AND blocking_locks.pid != blocked_locks.pid
-JOIN pg_catalog.pg_stat_activity blocking
-  ON blocking.pid = blocking_locks.pid
-WHERE NOT blocked_locks.granted;
-```
+| Metrica | Que mide | Por que se usa |
+|---|---|---|
+| `smartbancs_transacciones_total` | Transacciones procesadas, por estado y motivo. | Muestra el volumen real de negocio y permite detectar si un motivo de rechazo (por ejemplo, fondos insuficientes) se dispara de forma anormal. |
+| `smartbancs_errores_transacciones_total` | Errores ocurridos al procesar transacciones. | Alerta de forma temprana ante fallos que impiden completar una transaccion. |
+| `smartbancs_http_transaccion_duracion_seconds` | Tiempo de respuesta del endpoint `POST /api/transacciones`. | Es la metrica central para detectar degradacion de latencia percibida por el cliente. |
+| `smartbancs_redis_lua_duracion_seconds` | Duracion de la operacion atomica en Redis/Lua. | Permite aislar si la lentitud proviene del camino critico en Redis o de otra capa. |
+| `smartbancs_timeouts_total` | Timeouts detectados, por componente. | Detecta directamente escenarios como el del incidente simulado (timeouts en base de datos). |
 
-## Acciones inmediatas ante incidente
+### API de IA
 
-Completar con tu respuesta final. Base sugerida:
+| Metrica | Que mide | Por que se usa |
+|---|---|---|
+| `smartbancs_ia_recomendaciones_solicitadas_total` | Solicitudes de recomendacion hechas a la IA. | Mide la demanda real que recibe el servicio de IA. |
+| `smartbancs_ia_recomendaciones_procesadas_total` | Recomendaciones generadas por la IA. | Permite comparar solicitadas vs. procesadas y detectar recomendaciones que quedan sin generar. |
+| `smartbancs_ia_errores_total` | Errores del servicio de IA. | Aisla fallos propios de IA sin afectar el monitoreo de la transaccion principal. |
+| `smartbancs_ia_recomendacion_duracion_seconds` | Tiempo usado para generar una recomendacion. | Confirma que la IA se mantiene no bloqueante y detecta si empieza a demorar mas de lo esperado. |
 
-- Aumentar temporalmente replicas/workers de consumidores si el cuello esta en workers.
-- Reducir tasa de entrada con rate limit si la base esta saturada.
-- Pausar consumidores secundarios no criticos, por ejemplo IA, para priorizar transferencias.
-- Finalizar sesiones bloqueantes identificadas en PostgreSQL.
-- Aumentar pool/timeout solo si la base tiene capacidad real.
-- Revisar consultas lentas e indices.
-- Activar modo degradado: transferencias primero, recomendaciones despues.
+### Worker publicador
 
-## Post mortem
+| Metrica | Que mide | Por que se usa |
+|---|---|---|
+| `smartbancs_eventos_stream_recibidos_total` | Eventos leidos desde Redis Stream. | Confirma que el worker esta consumiendo efectivamente los eventos generados por la API. |
+| `smartbancs_eventos_mqtt_publicados_total` | Eventos publicados hacia MQTT, por destino. | Verifica que cada evento llega tanto a persistencia como a IA. |
+| `smartbancs_errores_mqtt_total` | Errores al publicar eventos en MQTT. | Detecta problemas de conectividad o disponibilidad del broker. |
+| `smartbancs_publicacion_mqtt_duracion_seconds` | Latencia de publicacion hacia MQTT. | Ayuda a identificar cuellos de botella en la etapa de mensajeria. |
 
-Completar:
+### Worker de persistencia
 
-- Resumen ejecutivo:
-- Impacto:
-- Linea de tiempo:
-- Causa raiz:
-- Factores contribuyentes:
-- Deteccion:
-- Respuesta:
-- Que funciono:
-- Que no funciono:
-- Acciones preventivas de infraestructura:
-- Acciones preventivas de codigo:
-- Owner y fecha compromiso:
+| Metrica | Que mide | Por que se usa |
+|---|---|---|
+| `smartbancs_eventos_persistencia_recibidos_total` | Eventos recibidos para persistir. | Punto de partida para contrastar cuantos eventos finalmente se guardan. |
+| `smartbancs_eventos_persistidos_total` | Transacciones guardadas correctamente en PostgreSQL. | Confirma que la persistencia realmente ocurre, no solo el consumo del evento. |
+| `smartbancs_eventos_duplicados_total` | Eventos duplicados detectados. | Verifica que la proteccion contra duplicados esta funcionando. |
+| `smartbancs_eventos_dlq_total` | Eventos enviados a la DLQ. | Senal temprana de payloads corruptos o invalidos que requieren revision manual. |
+| `smartbancs_errores_persistencia_total` | Errores del worker de persistencia. | Detecta problemas de conexion o escritura hacia PostgreSQL, como los descritos en el incidente simulado. |
+| `smartbancs_persistencia_duracion_seconds` | Tiempo de procesamiento y guardado en PostgreSQL. | Identifica si la base de datos se esta convirtiendo en el cuello de botella durante picos de carga. |
+
+### Worker de IA
+
+| Metrica | Que mide | Por que se usa |
+|---|---|---|
+| `smartbancs_ia_eventos_recibidos_total` | Eventos recibidos desde MQTT para analisis de IA. | Confirma que el worker de IA recibe el mismo flujo de eventos que persistencia. |
+| `smartbancs_ia_eventos_descartados_total` | Eventos descartados por la IA, con su motivo. | Permite entender por que ciertos eventos no generan una recomendacion. |
+| `smartbancs_ia_recomendaciones_solicitadas_total` | Recomendaciones solicitadas desde el worker. | Mide la demanda que llega al worker en si, antes de generar la recomendacion. |
+| `smartbancs_ia_recomendaciones_procesadas_total` | Recomendaciones procesadas a partir de eventos. | Contrasta cuantas de las solicitudes se resuelven efectivamente. |
+| `smartbancs_ia_recomendaciones_persistidas_total` | Recomendaciones guardadas en PostgreSQL. | Confirma que el ciclo completo (calculo + persistencia) se cerro correctamente. |
+| `smartbancs_ia_errores_total` | Errores del worker de IA. | Aisla fallas especificas del procesamiento asincrono de IA. |
+| `smartbancs_ia_recomendacion_duracion_seconds` | Tiempo de generacion de recomendacion. | Detecta degradacion de rendimiento especifica del calculo de recomendaciones. |
+
+> Algunas metricas de recomendaciones (`solicitadas`, `procesadas`, `errores`, `duracion`) se repiten entre `api-ia` y `worker-ia` a proposito: cada una las expone desde su propia posicion en el pipeline, lo que permite comparar la vista externa (API) contra la vista interna (worker) y detectar en cual de las dos capas aparece un problema.

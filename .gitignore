@@ -11,6 +11,9 @@ __pycache__/
 .venv/
 venv/
 
+# Carpetas temporales de asistentes/worktrees locales
+.kilo/
+
 ## mqtt credenciales 
 # se versiona como archivo para que docker no lo cree como carpeta
 # en un clon limpio del repositorio

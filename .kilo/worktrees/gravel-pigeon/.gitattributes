@@ -1,3 +1,0 @@
-*.sh text eol=lf
-mqtt/config/passwords text eol=lf
-*.sql text eol=lf

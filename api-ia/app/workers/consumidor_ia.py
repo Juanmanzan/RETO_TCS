@@ -137,6 +137,7 @@ async def procesar_mensaje(
         trace_id=solicitud.trace_id,
         transaccion_id=solicitud.transaccion_id,
         cuenta_origen_id=solicitud.cuenta_origen_id,
+        nivel=logging.DEBUG,
     )
 
     try:
@@ -173,6 +174,7 @@ async def procesar_mensaje(
             transaccion_id=recomendacion.transaccion_id,
             cliente_id=recomendacion.id_usuario,
             cuenta_origen_id=recomendacion.cuenta_origen_id,
+            nivel=logging.DEBUG,
         )
 
         cliente.ack(

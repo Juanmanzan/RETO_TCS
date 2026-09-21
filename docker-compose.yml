@@ -1,3 +1,9 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
 
   ## configuracion del contenedor de la base de datos postgres
@@ -5,6 +11,7 @@ services:
     image: postgres:17-alpine
     container_name: postgres_transacciones
     restart: unless-stopped
+    logging: *default-logging
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -34,6 +41,7 @@ services:
     image: eclipse-mosquitto:2
     container_name: mqtt_broker
     restart: unless-stopped
+    logging: *default-logging
     environment:
       MQTT_USER: ${MQTT_USER}
       MQTT_PASSWORD: ${MQTT_PASSWORD}
@@ -64,6 +72,7 @@ services:
     image: redis:8-alpine
     container_name: redis_streams
     restart: unless-stopped
+    logging: *default-logging
     environment:
       REDIS_USER: ${REDIS_USER}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
@@ -97,6 +106,7 @@ services:
   redis-init:
     image: redis:8-alpine
     container_name: redis_init
+    logging: *default-logging
 
     environment:
       REDIS_HOST: redis
@@ -129,9 +139,11 @@ services:
       dockerfile: Dockerfile
     container_name: api_transacciones
     restart: unless-stopped
+    logging: *default-logging
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
+      REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-800}
       REDIS_STREAM_TRANSACCIONES: ${REDIS_STREAM_TRANSACCIONES}
       REDIS_CONSUMER_GROUP_MQTT: ${REDIS_CONSUMER_GROUP_MQTT}
       MQTT_URL: ${MQTT_URL}
@@ -169,6 +181,7 @@ services:
       dockerfile: Dockerfile
     container_name: api_ia
     restart: unless-stopped
+    logging: *default-logging
     environment:
       DATABASE_URL: ${DATABASE_URL}
       MQTT_URL: ${MQTT_URL}
@@ -203,6 +216,7 @@ services:
       dockerfile: Dockerfile
     container_name: worker_ia
     restart: unless-stopped
+    logging: *default-logging
     command:
       [
         "python",
@@ -233,6 +247,7 @@ services:
     image: victoriametrics/victoria-metrics:v1.152.0
     container_name: victoriametrics
     restart: unless-stopped
+    logging: *default-logging
     command:
       - "-storageDataPath=/victoria-metrics-data"
       - "-retentionPeriod=30d"
@@ -249,6 +264,7 @@ services:
     image: victoriametrics/vmagent:v1.152.0
     container_name: vmagent
     restart: unless-stopped
+    logging: *default-logging
     command:
       - "-promscrape.config=/etc/vmagent/scrape.yml"
       - "-remoteWrite.url=http://victoriametrics:8428/api/v1/write"
@@ -270,6 +286,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
+    logging: *default-logging
 
     ports:
       - "3000:3000"
@@ -294,6 +311,7 @@ services:
     image: grafana/loki:latest
     container_name: loki
     restart: unless-stopped
+    logging: *default-logging
 
     command:
       - "-config.file=/etc/loki/local-config.yaml"
@@ -312,6 +330,7 @@ services:
     image: grafana/alloy:latest
     container_name: alloy
     restart: unless-stopped
+    logging: *default-logging
     command:
       - "run"
       - "/etc/alloy/config.alloy"
@@ -335,6 +354,7 @@ services:
         dockerfile: Dockerfile
       container_name: worker_publicador_eventos
       restart: unless-stopped
+      logging: *default-logging
       command:
         [
           "python",
@@ -344,6 +364,7 @@ services:
       environment:
         DATABASE_URL: ${DATABASE_URL}
         REDIS_URL: ${REDIS_URL}
+        REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-800}
         REDIS_STREAM_TRANSACCIONES: ${REDIS_STREAM_TRANSACCIONES}
         REDIS_CONSUMER_GROUP_MQTT: ${REDIS_CONSUMER_GROUP_MQTT}
         MQTT_URL: ${MQTT_URL}
@@ -366,6 +387,7 @@ services:
       dockerfile: Dockerfile
     container_name: worker_persistencia
     restart: unless-stopped
+    logging: *default-logging
 
     command:
       [
@@ -377,6 +399,7 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
+      REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-800}
       REDIS_STREAM_TRANSACCIONES: ${REDIS_STREAM_TRANSACCIONES}
       REDIS_CONSUMER_GROUP_MQTT: ${REDIS_CONSUMER_GROUP_MQTT}
       MQTT_URL: ${MQTT_URL}

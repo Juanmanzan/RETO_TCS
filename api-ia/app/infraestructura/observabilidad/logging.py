@@ -120,9 +120,11 @@ def registrar_evento(
     transaccion_id: str | None = None,
     cliente_id: int | None = None,
     cuenta_origen_id: int | None = None,
+    nivel: int = logging.INFO,
 ) -> None:
 
-    logger.info(
+    logger.log(
+        nivel,
         mensaje,
         extra={
             "componente": componente,

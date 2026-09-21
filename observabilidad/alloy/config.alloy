@@ -9,6 +9,18 @@ discovery.relabel "contenedores" {
 
   targets = discovery.docker.contenedores.targets
 
+  // evita enviar a Loki logs internos de la infraestructura
+  // y conserva solamente los logs producidos por las aplicaciones
+  // y workers del MVP.
+  rule {
+    source_labels = [
+      "__meta_docker_container_label_com_docker_compose_service",
+    ]
+
+    regex  = "api-transacciones|api-ia|worker-publicador|worker-persistencia|worker-ia"
+    action = "keep"
+  }
+
   // nombre del contenedor
   rule {
     source_labels = [
